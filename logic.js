@@ -1,8 +1,4 @@
 
-// Function to determine marker size based on acres
-function markerSize(acres) {
-  return acres ;
-}
 
 // Use local data
 var link = "static/nat_park_attednce_data.json";
@@ -10,38 +6,22 @@ var link = "static/nat_park_attednce_data.json";
 var parkMarkers = [];
 
 d3.json(link, function(data){
-// Loop through locations and create city and state markers
 
-  // parse data
-  data.forEach(function(d) {
-    d.visitors = +d.visitors;
-    d.area.acres = +d.area.acres;
     
-
+// Loop through locations and create markers
 for (var i = 0; i < data.length; i++) { 
 
-  // converts string to integer
-  // data[i].visitors = data[+i].visitors;
-
-  console.log(d.visitors);
-
-  // Setting the marker radius for the state by passing population into the markerSize function
-  parkMarkers.push(
-    L.circle((data[i].coordinates.latitude, data[i].coordinates.longitude), {
-      stroke: false,
-      fillOpacity: 0.75,
-      color: "white",
-      fillColor: "white",
-    // Setting our circle's radius equal to the output of our markerSize function
-    // This will make our marker's size proportionate to its population
-      // radius: markerSize(d.visitors)
-      radius: 100
-    })
-  );
-}
+    // loop through the cities array, create a new marker, push it to the cityMarkers array
+    parkMarkers.push(
+      L.marker(data[i].coordinates.latitude, data[i].coordinates.longitude).bindPopup("<h1>" + data[i].title + "</h1> <hr> <h3>Visitors: " + data[i].visitors + "</h3>")
+    );
   
-  })
+  console.log(data[i].coordinates.latitude, data[i].coordinates.longitude);
+
+}
 })
+
+
 // Define variables for our base layers
 var streetmap = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
